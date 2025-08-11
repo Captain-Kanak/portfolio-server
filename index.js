@@ -9,7 +9,9 @@ const port = process.env.PORT || 5000;
 
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({ origin: ["https://portfolio-seven-rust-4cu9pywf9f.vercel.app"] })
+);
 
 // database management
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.0d3a79b.mongodb.net`;
