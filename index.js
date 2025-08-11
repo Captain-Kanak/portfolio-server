@@ -31,9 +31,20 @@ async function run() {
     // database collections
     const projectCollections = client.db("portfolio").collection("projects");
 
+    // projects post api
+    app.post("/projects", async (req, res) => {
+      const project = req.body;
+      project.createdAt = new Date().toISOString();
+      const result = await projectCollections.insertOne(project);
+      res.send(result);
+    });
+
     // projects get api
     app.get("/projects", async (req, res) => {
-      const projectsData = await projectCollections.find().toArray();
+      const projectsData = await projectCollections
+        .find()
+        .sort({ createdAt: -1 })
+        .toArray();
       res.send(projectsData);
     });
 
