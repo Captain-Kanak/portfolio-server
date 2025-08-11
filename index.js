@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 // create app and port
 const app = express();
@@ -31,7 +31,7 @@ async function run() {
     // database collections
     const projectCollections = client.db("portfolio").collection("projects");
 
-    // projects post api
+    // project post api
     app.post("/projects", async (req, res) => {
       const project = req.body;
       project.createdAt = new Date().toISOString();
@@ -46,6 +46,15 @@ async function run() {
         .sort({ createdAt: -1 })
         .toArray();
       res.send(projectsData);
+    });
+
+    // project delete api
+    app.delete("/projects/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+
+      const result = await projectCollections.deleteOne(query);
+      res.send(result);
     });
 
     // Send a ping to confirm a successful connection
