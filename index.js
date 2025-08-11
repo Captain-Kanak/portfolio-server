@@ -29,6 +29,13 @@ async function run() {
     // await client.connect();
 
     // database collections
+    const projectCollections = client.db("portfolio").collection("projects");
+
+    // projects get api
+    app.get("/projects", async (req, res) => {
+      const projectsData = await projectCollections.find().toArray();
+      res.send(projectsData);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
