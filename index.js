@@ -55,10 +55,19 @@ async function run() {
       res.send(projectsData);
     });
 
+    // single project get api
+    app.get("/projects/:projectId", async (req, res) => {
+      const projectId = req.params.projectId;
+      const query = { _id: new ObjectId(projectId) };
+
+      const result = await projectCollections.findOne(query);
+      res.send(result);
+    });
+
     // project delete api
-    app.delete("/projects/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
+    app.delete("/projects/:projectId", async (req, res) => {
+      const projectId = req.params.projectId;
+      const query = { _id: new ObjectId(projectId) };
 
       const result = await projectCollections.deleteOne(query);
       res.send(result);
