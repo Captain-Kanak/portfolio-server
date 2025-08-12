@@ -10,7 +10,12 @@ const port = process.env.PORT || 5000;
 // middleware
 app.use(express.json());
 app.use(
-  cors({ origin: ["https://portfolio-seven-rust-4cu9pywf9f.vercel.app"] })
+  cors({
+    origin: [
+      "https://portfolio-seven-rust-4cu9pywf9f.vercel.app",
+      "http://localhost:5173",
+    ],
+  })
 );
 
 // database management
