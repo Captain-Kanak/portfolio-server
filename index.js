@@ -37,11 +37,13 @@ async function run() {
 
     // database collections
     const projectCollections = client.db("portfolio").collection("projects");
+    const messageCollections = client.db("portfolio").collection("messages");
 
     // project post api
     app.post("/projects", async (req, res) => {
       const project = req.body;
       project.createdAt = new Date().toISOString();
+
       const result = await projectCollections.insertOne(project);
       res.send(result);
     });
@@ -71,6 +73,24 @@ async function run() {
 
       const result = await projectCollections.deleteOne(query);
       res.send(result);
+    });
+
+    // message post api
+    app.post("/messages", async (req, res) => {
+      const message = req.body;
+      message.createdAt = new Date().toISOString();
+
+      const result = await messageCollections.insertOne(message);
+      res.send(result);
+    });
+
+    // messages get api
+    app.get("/messages", async (req, res) => {
+      const messagesData = await messageCollections
+        .find()
+        .sort({ createdAt: -1 })
+        .toArray();
+      res.send(messagesData);
     });
 
     // Send a ping to confirm a successful connection
