@@ -107,7 +107,7 @@ run().catch(console.dir);
 
 // server basic health check
 app.get("/", (req, res) => {
-  res.send("Server Running Successfully!");
+  res.send("Portfolio Server Running Successfully!");
 });
 
 // server start
