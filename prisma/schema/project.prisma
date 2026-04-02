@@ -1,0 +1,20 @@
+model Project {
+    id          String    @id @default(uuid(7))
+    title       String
+    description String
+    images      String[]
+    features    String[]
+    projectUrl  String
+    backendUrl  String
+    frontendUrl String
+    views       Int       @default(0)
+    isDeleted   Boolean   @default(false)
+    deletedAt   DateTime?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    technologies ProjectTechnology[]
+    feedbacks    Feedback[]
+
+    @@map("projects")
+}

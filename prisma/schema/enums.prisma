@@ -1,0 +1,16 @@
+enum AdminRole {
+    SUPER_ADMIN
+    ADMIN
+}
+
+enum AdminStatus {
+    ACTIVE
+    DEACTIVE
+}
+
+enum TechnologyType {
+    FRONTEND
+    BACKEND
+    DATABASE
+    PACKAGE
+}

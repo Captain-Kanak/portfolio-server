@@ -1,0 +1,31 @@
+model Technology {
+    id          String         @id @default(uuid(7))
+    name        String
+    icon        String?
+    description String?
+    type        TechnologyType
+    isDeleted   Boolean        @default(false)
+    deletedAt   DateTime?
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+
+    projects ProjectTechnology[]
+
+    @@map("technologies")
+}
+
+model ProjectTechnology {
+    id           String    @id @default(uuid(7))
+    projectId    String
+    technologyId String
+    isDeleted    Boolean   @default(false)
+    deletedAt    DateTime?
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+
+    project    Project    @relation(fields: [projectId], references: [id])
+    technology Technology @relation(fields: [technologyId], references: [id])
+
+    @@unique([projectId, technologyId])
+    @@map("project_technologies")
+}

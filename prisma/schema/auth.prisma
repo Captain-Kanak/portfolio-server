@@ -1,0 +1,31 @@
+model Admin {
+    id        String      @id @default(uuid(7))
+    name      String
+    email     String      @unique
+    password  String
+    image     String?
+    role      AdminRole   @default(ADMIN)
+    status    AdminStatus @default(ACTIVE)
+    isDeleted Boolean     @default(false)
+    deletedAt DateTime?
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+
+    tokens Token[]
+
+    @@map("admins")
+}
+
+model Token {
+    id        String    @id @default(uuid(7))
+    token     String    @unique
+    adminId   String
+    isDeleted Boolean   @default(false)
+    deletedAt DateTime?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    admin Admin @relation(fields: [adminId], references: [id])
+
+    @@map("tokens")
+}

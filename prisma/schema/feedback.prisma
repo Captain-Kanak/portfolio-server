@@ -1,0 +1,13 @@
+model Feedback {
+    id        String    @id @default(uuid(7))
+    feedback  String
+    projectId String
+    isDeleted Boolean   @default(false)
+    deletedAt DateTime?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    project Project @relation(fields: [projectId], references: [id])
+
+    @@map("feedbacks")
+}
