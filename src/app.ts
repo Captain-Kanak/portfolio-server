@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import status from "http-status";
 import { indexRouter } from "./routes/index.js";
-import globalErrorHandler from "./app/middlewares/error-middleware.js";
+import globalErrorHandler from "./middlewares/error-middleware.js";
 
 const app: Application = express();
 

@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
-import { prisma } from "../../../lib/prisma.js";
+import { prisma } from "../../lib/prisma.js";
 import AppError from "../../errors/AppError.js";
 import status from "http-status";
-import { tokenUtils } from "../../../utils/token.js";
+import { tokenUtils } from "../../utils/token.js";
 import { Admin } from "@prisma/client";
 import { LoginPayload } from "./auth.interface.js";
 

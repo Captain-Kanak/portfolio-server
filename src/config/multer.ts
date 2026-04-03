@@ -1,7 +1,7 @@
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { cloudinaryUpload } from "./cloudinary.js";
 import multer from "multer";
-import AppError from "../app/errors/AppError.js";
+import AppError from "../errors/AppError.js";
 import status from "http-status";
 
 const storage = new CloudinaryStorage({

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../../utils/catch-async.js";
+import { catchAsync } from "../../utils/catch-async.js";
 import { authService } from "./auth.service.js";
 import status from "http-status";
-import { tokenUtils } from "../../../utils/token.js";
+import { tokenUtils } from "../../utils/token.js";
 
 const login = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;

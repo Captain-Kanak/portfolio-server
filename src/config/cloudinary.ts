@@ -1,6 +1,6 @@
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { env } from "./env.js";
-import AppError from "../app/errors/AppError.js";
+import AppError from "../errors/AppError.js";
 import status from "http-status";
 
 cloudinary.config({

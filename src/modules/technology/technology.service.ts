@@ -1,15 +1,19 @@
 import status from "http-status";
 import AppError from "../../errors/AppError.js";
 import { CreateTechnologyPayload } from "./technology.interface.js";
-import { prisma } from "../../../lib/prisma.js";
+import { prisma } from "../../lib/prisma.js";
 import { Technology } from "@prisma/client";
 
 const addNewTechnology = async (
   payload: CreateTechnologyPayload,
+  adminId: string,
 ): Promise<Technology> => {
   try {
     const newTechnology = await prisma.technology.create({
-      data: payload,
+      data: {
+        ...payload,
+        adminId,
+      },
     });
 
     return newTechnology;
