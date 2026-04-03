@@ -11,13 +11,13 @@ async function seedSuperAdmin() {
       role: AdminRole.SUPER_ADMIN,
     };
 
-    const isAdminExist = await prisma.admin.findUnique({
+    const isAdminExists = await prisma.admin.findUnique({
       where: {
         email: data.email,
       },
     });
 
-    if (isAdminExist) {
+    if (isAdminExists) {
       console.log("Super Admin already exists. Skipping seeding.");
       return;
     }
