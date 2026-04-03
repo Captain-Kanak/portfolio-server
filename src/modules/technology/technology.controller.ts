@@ -17,6 +17,9 @@ const addNewTechnology = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getTechnologies = catchAsync(async (req: Request, res: Response) => {});
+
 export const technologyController = {
   addNewTechnology,
+  getTechnologies,
 };

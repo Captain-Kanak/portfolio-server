@@ -25,6 +25,17 @@ const addNewTechnology = async (
   }
 };
 
+const getTechnologies = async () => {
+  try {
+  } catch (error: any) {
+    throw new AppError(
+      error.message || "Failed to get technologies",
+      status.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
 export const technologyService = {
   addNewTechnology,
+  getTechnologies,
 };

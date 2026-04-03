@@ -14,4 +14,6 @@ router.post(
   technologyController.addNewTechnology,
 );
 
+router.get("/", technologyController.getTechnologies);
+
 export { router as technologyRouter };
