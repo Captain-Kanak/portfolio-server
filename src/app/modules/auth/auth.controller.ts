@@ -5,9 +5,9 @@ import status from "http-status";
 import { tokenUtils } from "../../../utils/token.js";
 
 const login = catchAsync(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const payload = req.body;
 
-  const result = await authService.login(email, password);
+  const result = await authService.login(payload);
   const { token } = result;
 
   tokenUtils.setTokenCookie(res, token);

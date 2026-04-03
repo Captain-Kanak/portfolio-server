@@ -2,7 +2,7 @@ model Admin {
     id        String      @id @default(uuid(7))
     name      String
     email     String
-    password  String
+    password  String      @db.VarChar(32)
     image     String?
     role      AdminRole   @default(ADMIN)
     status    AdminStatus @default(ACTIVE)

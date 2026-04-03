@@ -4,15 +4,15 @@ import AppError from "../../errors/AppError.js";
 import status from "http-status";
 import { tokenUtils } from "../../../utils/token.js";
 import { Admin } from "@prisma/client";
+import { LoginPayload } from "./auth.interface.js";
 
 const login = async (
-  email: string,
-  password: string,
+  payload: LoginPayload,
 ): Promise<{ token: string; admin: Partial<Admin> }> => {
   try {
     const isAdminExists = await prisma.admin.findUnique({
       where: {
-        email: email,
+        email: payload.email,
       },
     });
 
@@ -21,7 +21,7 @@ const login = async (
     }
 
     const isPasswordValid = await bcrypt.compare(
-      password,
+      payload.password,
       isAdminExists.password,
     );
 
