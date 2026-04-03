@@ -8,6 +8,7 @@
     "dev": "npx tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/src/server.js",
+    "postinstall": "prisma generate",
     "migrate": "prisma migrate dev",
     "generate": "prisma generate",
     "seed": "npx tsx src/seeds/super-admin.ts"
