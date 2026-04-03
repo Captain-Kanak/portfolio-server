@@ -1,21 +1,20 @@
-import { JwtPayload } from "jsonwebtoken";
-import { jwtUtils } from "./jwt.js";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { env } from "../config/env.js";
 import ms, { StringValue } from "ms";
-import { Response } from "express";
-import { cookieUtils } from "./cookie.js";
+import { Request, Response } from "express";
+import { DecodedToken } from "../types/auth.type.js";
 
 const secret = env.JWT_SECRET;
 const expiresIn = env.JWT_EXPIRES_IN;
 
-const getToken = (payload: JwtPayload) => {
-  return jwtUtils.createToken(payload, secret, {
+const generateToken = (payload: JwtPayload) => {
+  return jwt.sign(payload, secret, {
     expiresIn: Math.floor(ms(expiresIn as StringValue) / 1000),
   });
 };
 
 const setTokenCookie = (res: Response, token: string) => {
-  cookieUtils.setCookie(res, "auth_token", token, {
+  res.cookie("auth_token", token, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
@@ -24,12 +23,17 @@ const setTokenCookie = (res: Response, token: string) => {
   });
 };
 
+const getTokenCookie = (req: Request, key: string) => {
+  return req.cookies[key];
+};
+
 const verifyToken = (token: string) => {
-  return jwtUtils.verifyToken(token, secret);
+  return jwt.verify(token, secret) as DecodedToken;
 };
 
 export const tokenUtils = {
-  getToken,
+  generateToken,
   setTokenCookie,
+  getTokenCookie,
   verifyToken,
 };

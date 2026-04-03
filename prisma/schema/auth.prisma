@@ -11,7 +11,9 @@ model Admin {
     createdAt DateTime    @default(now())
     updatedAt DateTime    @updatedAt
 
-    tokens Token[]
+    tokens       Token[]
+    technologies Technology[]
+    projects     Project[]
 
     @@unique([email])
     @@map("admins")

@@ -8,6 +8,7 @@ model Project {
     backendUrl  String
     frontendUrl String
     views       Int       @default(0)
+    adminId     String
     isDeleted   Boolean   @default(false)
     deletedAt   DateTime?
     createdAt   DateTime  @default(now())
@@ -15,6 +16,8 @@ model Project {
 
     technologies ProjectTechnology[]
     feedbacks    Feedback[]
+
+    admin Admin @relation(fields: [adminId], references: [id])
 
     @@unique([title])
     @@index([projectUrl])

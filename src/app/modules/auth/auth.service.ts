@@ -29,7 +29,7 @@ const login = async (
       throw new AppError("Invalid password", status.UNAUTHORIZED);
     }
 
-    const token = tokenUtils.getToken({
+    const token = tokenUtils.generateToken({
       id: isAdminExists.id,
       name: isAdminExists.name,
       email: isAdminExists.email,

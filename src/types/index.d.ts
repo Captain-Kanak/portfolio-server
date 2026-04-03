@@ -1,9 +1,9 @@
-import { Admin } from "@prisma/client";
+import { DecodedToken } from "./auth.type.ts";
 
 declare global {
   namespace Express {
     interface Request {
-      admin?: Admin;
+      admin?: DecodedToken;
     }
   }
 }
