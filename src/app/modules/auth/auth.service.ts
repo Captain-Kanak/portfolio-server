@@ -38,6 +38,13 @@ const login = async (
       isDeleted: isAdminExists.isDeleted,
     });
 
+    await prisma.token.create({
+      data: {
+        adminId: isAdminExists.id,
+        token: token,
+      },
+    });
+
     return {
       token,
       admin: {
