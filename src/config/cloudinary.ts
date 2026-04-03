@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadFileToCloudinary = (
+export const uploadFileToCloudinary = async (
   buffer: Buffer,
   fileName: string,
 ): Promise<UploadApiResponse> => {
@@ -32,7 +32,7 @@ export const uploadFileToCloudinary = (
     } else if (pdfExtensions.includes(extension as string)) {
       folderName = "pdfs";
     } else {
-      fileName = "others";
+      folderName = "others";
     }
 
     const fileNameWithoutExtension = fileName
@@ -81,4 +81,26 @@ export const uploadFileToCloudinary = (
   }
 };
 
-export const deleteFromCloudinary = (url: string) => {};
+export const deleteFromCloudinary = async (url: string) => {
+  try {
+    const regex = /\/v\d+\/(.+?)(?:\.[a-zA-Z0-9]+)+$/;
+    const match = url.match(regex);
+
+    if (match && match[1]) {
+      const publicId = match[1];
+
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: "image",
+      });
+
+      console.log(`File ${publicId} deleted from Cloudinary`);
+    }
+  } catch (error: any) {
+    throw new AppError(
+      error.message || "Failed to delete file from Cloudinary",
+      status.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+export { cloudinary as cloudinaryUpload };
