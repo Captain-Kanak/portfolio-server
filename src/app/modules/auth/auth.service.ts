@@ -8,7 +8,7 @@ import { Admin } from "@prisma/client";
 const login = async (
   email: string,
   password: string,
-): Promise<{ token: string; admin: Admin }> => {
+): Promise<{ token: string; admin: Partial<Admin> }> => {
   try {
     const isAdminExists = await prisma.admin.findUnique({
       where: {
@@ -40,7 +40,18 @@ const login = async (
 
     return {
       token,
-      admin: isAdminExists,
+      admin: {
+        id: isAdminExists.id,
+        name: isAdminExists.name,
+        email: isAdminExists.email,
+        image: isAdminExists.image,
+        role: isAdminExists.role,
+        status: isAdminExists.status,
+        isDeleted: isAdminExists.isDeleted,
+        deletedAt: isAdminExists.deletedAt,
+        createdAt: isAdminExists.createdAt,
+        updatedAt: isAdminExists.updatedAt,
+      },
     };
   } catch (error: any) {
     throw new AppError(
