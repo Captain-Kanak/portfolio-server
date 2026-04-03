@@ -16,5 +16,7 @@ model Project {
     technologies ProjectTechnology[]
     feedbacks    Feedback[]
 
+    @@unique([title])
+    @@index([projectUrl])
     @@map("projects")
 }

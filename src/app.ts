@@ -8,6 +8,7 @@ app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
   return res.status(status.OK).json({
+    success: true,
     message: "Welcome to my Portfolio Server",
   });
 });

@@ -1,7 +1,7 @@
 model Admin {
     id        String      @id @default(uuid(7))
     name      String
-    email     String      @unique
+    email     String
     password  String
     image     String?
     role      AdminRole   @default(ADMIN)
@@ -13,12 +13,13 @@ model Admin {
 
     tokens Token[]
 
+    @@unique([email])
     @@map("admins")
 }
 
 model Token {
     id        String    @id @default(uuid(7))
-    token     String    @unique
+    token     String
     adminId   String
     isDeleted Boolean   @default(false)
     deletedAt DateTime?
@@ -27,5 +28,6 @@ model Token {
 
     admin Admin @relation(fields: [adminId], references: [id])
 
+    @@unique([token])
     @@map("tokens")
 }
