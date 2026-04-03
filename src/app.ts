@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import status from "http-status";
 import { indexRouter } from "./routes/index.js";
+import globalErrorHandler from "./app/middlewares/error-middleware.js";
 
 const app: Application = express();
 
@@ -14,5 +15,15 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1", indexRouter);
+
+app.use((req: Request, res: Response) => {
+  res.status(status.NOT_FOUND).json({
+    success: false,
+    message: "Route Not Found",
+    route: req.originalUrl,
+  });
+});
+
+app.use(globalErrorHandler);
 
 export default app;
