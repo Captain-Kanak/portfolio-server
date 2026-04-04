@@ -1,7 +1,7 @@
 model Project {
     id          String    @id @default(uuid(7))
-    title       String
-    description String
+    title       String    @db.VarChar(100)
+    description String    @db.Text
     images      String[]
     features    String[]
     projectUrl  String

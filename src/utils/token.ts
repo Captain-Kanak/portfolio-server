@@ -16,8 +16,8 @@ const generateToken = (payload: JwtPayload) => {
 const setTokenCookie = (res: Response, token: string) => {
   res.cookie("auth_token", token, {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: env.NODE_ENV === "production",
+    sameSite: env.NODE_ENV === "production" ? "none" : "lax",
     path: "/",
     maxAge: Math.floor(ms(expiresIn as StringValue)),
   });

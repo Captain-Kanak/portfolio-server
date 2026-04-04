@@ -2,10 +2,13 @@ import express, { Application, Request, Response } from "express";
 import status from "http-status";
 import { indexRouter } from "./routes/index.js";
 import globalErrorHandler from "./middlewares/error-middleware.js";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
   return res.status(status.OK).json({

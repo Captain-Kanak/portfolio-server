@@ -5,7 +5,10 @@ import status from "http-status";
 import { DecodedToken } from "../../types/auth.type.js";
 
 const addNewTechnology = catchAsync(async (req: Request, res: Response) => {
-  const payload = req.body;
+  const payload = {
+    ...req.body,
+    icon: req.file?.path,
+  };
   const { id } = req.admin as DecodedToken;
 
   const result = await technologyService.addNewTechnology(payload, id);

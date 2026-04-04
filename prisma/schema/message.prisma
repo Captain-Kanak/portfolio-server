@@ -1,8 +1,8 @@
 model Message {
     id        String    @id @default(uuid(7))
-    name      String
-    email     String
-    message   String
+    name      String    @db.VarChar(100)
+    email     String    @db.VarChar(100)
+    message   String    @db.Text
     isDeleted Boolean   @default(false)
     deletedAt DateTime?
     createdAt DateTime  @default(now())

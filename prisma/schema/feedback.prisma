@@ -1,6 +1,7 @@
 model Feedback {
     id        String    @id @default(uuid(7))
-    feedback  String
+    feedback  String    @db.Text
+    email     String?   @db.VarChar(100)
     projectId String
     isDeleted Boolean   @default(false)
     deletedAt DateTime?

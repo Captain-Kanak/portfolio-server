@@ -1,8 +1,8 @@
 model Admin {
     id        String      @id @default(uuid(7))
-    name      String
-    email     String
-    password  String      @db.VarChar(32)
+    name      String      @db.VarChar(100)
+    email     String      @db.VarChar(100)
+    password  String
     image     String?
     role      AdminRole   @default(ADMIN)
     status    AdminStatus @default(ACTIVE)
