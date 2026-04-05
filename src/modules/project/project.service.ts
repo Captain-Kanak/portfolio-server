@@ -40,6 +40,39 @@ const addNewProject = async (
   }
 };
 
+const getProjectById = async (id: string) => {
+  try {
+    const project = await prisma.project.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!project) {
+      throw new AppError("Project not found", status.NOT_FOUND);
+    }
+
+    await prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+
+    return project;
+  } catch (error: any) {
+    throw new AppError(
+      error.message || "Failed to get project",
+      status.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
 export const projectService = {
   addNewProject,
+  getProjectById,
 };
