@@ -261,15 +261,11 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
     const { selects } = this.queryParams;
     const fieldsArray = selects?.split(",").map((field) => field.trim());
 
-    if (!fieldsArray?.length) {
-      return this;
-    }
-
     if (fieldsArray?.length) {
       delete this.queryParams.includes;
     }
 
-    fieldsArray.forEach((field) => {
+    fieldsArray?.forEach((field) => {
       // if (field.includes(".")) {
       //   const fieldParts = field.split(".").map((field) => field.trim());
 
@@ -316,18 +312,14 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
   }
 
   includes(relations: TInclude): this {
-    if (this.queryParams.fields) {
+    if (this.queryParams.selects) {
       return this;
     }
 
     const { includes } = this.queryParams;
     const includesArray = includes?.split(",").map((field) => field.trim());
 
-    if (!includesArray?.length) {
-      return this;
-    }
-
-    includesArray.forEach((field) => {
+    includesArray?.forEach((field) => {
       this.query.include = {
         ...this.query.include,
         [field]: true,
