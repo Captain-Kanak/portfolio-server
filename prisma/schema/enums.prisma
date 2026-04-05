@@ -9,8 +9,16 @@ enum AdminStatus {
 }
 
 enum TechnologyType {
-    FRONTEND
-    BACKEND
-    DATABASE
-    PACKAGE
+  LANGUAGE
+  FRONTEND
+  BACKEND
+  DATABASE
+  ORM
+  DEVOPS
+  CLOUD
+  TOOL
+  TESTING
+  AUTH
+  API
+  MOBILE
 }

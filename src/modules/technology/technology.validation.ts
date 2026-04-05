@@ -15,10 +15,18 @@ const createTechnologySchema = z.object({
     .max(1000, "Description can't be more than 1000 characters")
     .optional(),
   type: z.enum([
-    TechnologyType.BACKEND,
+    TechnologyType.LANGUAGE,
     TechnologyType.FRONTEND,
+    TechnologyType.BACKEND,
     TechnologyType.DATABASE,
-    TechnologyType.PACKAGE,
+    TechnologyType.ORM,
+    TechnologyType.DEVOPS,
+    TechnologyType.CLOUD,
+    TechnologyType.TOOL,
+    TechnologyType.TESTING,
+    TechnologyType.AUTH,
+    TechnologyType.API,
+    TechnologyType.MOBILE,
   ]),
 });
 

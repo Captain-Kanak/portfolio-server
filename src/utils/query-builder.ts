@@ -45,6 +45,44 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
     return this;
   }
 
+  sort(): this {
+    if (this.sortBy.includes(".")) {
+      const fieldParts = this.sortBy.split(".").map((field) => field.trim());
+
+      console.log(fieldParts);
+
+      if (fieldParts.length === 2) {
+        const [field, nestedField] = fieldParts;
+
+        this.query.orderBy = {
+          [field]: {
+            [nestedField]: this.sortOrder,
+          },
+        };
+
+        return this;
+      } else if (fieldParts.length === 3) {
+        const [field, nestedField1, nestedField2] = fieldParts;
+
+        this.query.orderBy = {
+          [field]: {
+            [nestedField1]: {
+              [nestedField2]: this.sortOrder,
+            },
+          },
+        };
+
+        return this;
+      }
+    }
+
+    this.query.orderBy = {
+      [this.sortBy]: this.sortOrder,
+    };
+
+    return this;
+  }
+
   where(conditions: TWhereInput): this {
     this.query.where = this._deepMerge(
       this.query.where as PrismaWhereConditions,
@@ -117,43 +155,23 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
 
   filter(): this {
     const { filterableFields } = this.config;
-    const excludedFields = [
-      "page",
-      "limit",
-      "searchTerm",
-      "sortBy",
-      "sortOrder",
-    ];
 
     const filterParams: Record<string, unknown> = {};
 
     Object.keys(this.queryParams).forEach((key) => {
-      if (!excludedFields.includes(key)) {
+      if (filterableFields?.includes(key)) {
         filterParams[key] = this.queryParams[key];
       }
     });
 
     Object.keys(filterParams).forEach((field) => {
-      const value = filterParams[field];
+      const value: unknown = filterParams[field];
 
       if (value === "" || value === undefined || value === null) {
         return;
       }
 
-      const isAllowedField =
-        !filterableFields ||
-        filterableFields.length === 0 ||
-        filterableFields.includes(field);
-
-      if (!isAllowedField) {
-        return;
-      }
-
-      if (
-        typeof value === "object" &&
-        value !== null &&
-        !Array.isArray(value)
-      ) {
+      if (typeof value === "object" && !Array.isArray(value)) {
         this.query.where = {
           ...this.query.where,
           [field]: this._parseFilterValueRange(
@@ -168,10 +186,6 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
           ),
         };
 
-        return;
-      }
-
-      if (filterableFields && !filterableFields.includes(field)) {
         return;
       }
 
@@ -239,44 +253,6 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
         [field]: this._parseFilterValue(value),
       };
     });
-
-    return this;
-  }
-
-  sort(): this {
-    if (this.sortBy.includes(".")) {
-      const fieldParts = this.sortBy.split(".").map((field) => field.trim());
-
-      console.log(fieldParts);
-
-      if (fieldParts.length === 2) {
-        const [field, nestedField] = fieldParts;
-
-        this.query.orderBy = {
-          [field]: {
-            [nestedField]: this.sortOrder,
-          },
-        };
-
-        return this;
-      } else if (fieldParts.length === 3) {
-        const [field, nestedField1, nestedField2] = fieldParts;
-
-        this.query.orderBy = {
-          [field]: {
-            [nestedField1]: {
-              [nestedField2]: this.sortOrder,
-            },
-          },
-        };
-
-        return this;
-      }
-    }
-
-    this.query.orderBy = {
-      [this.sortBy]: this.sortOrder,
-    };
 
     return this;
   }
@@ -410,7 +386,7 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
       return false;
     }
 
-    if (typeof value === "string" && !isNaN(Number(value)) && value !== "") {
+    if (typeof value === "string" && !isNaN(Number(value))) {
       return Number(value);
     }
 
