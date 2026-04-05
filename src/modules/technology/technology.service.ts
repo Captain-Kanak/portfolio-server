@@ -55,6 +55,10 @@ const getTechnologies = async (
       })
       .search()
       .filter()
+      .select()
+      .includes({
+        _count: true,
+      })
       .execute();
 
     return result;
