@@ -302,6 +302,42 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
     const includesArray = includes?.split(",").map((field) => field.trim());
 
     includesArray?.forEach((field) => {
+      if (field.includes(".")) {
+        const fieldParts = field.split(".").map((field) => field.trim());
+
+        if (fieldParts.length === 2) {
+          const [field, nestedField] = fieldParts;
+
+          this.query.include = {
+            ...this.query.include,
+            [field]: {
+              select: {
+                [nestedField]: true,
+              },
+            },
+          };
+
+          return;
+        } else if (fieldParts.length === 3) {
+          const [field, nestedField1, nestedField2] = fieldParts;
+
+          this.query.include = {
+            ...this.query.include,
+            [field]: {
+              select: {
+                [nestedField1]: {
+                  select: {
+                    [nestedField2]: true,
+                  },
+                },
+              },
+            },
+          };
+
+          return;
+        }
+      }
+
       this.query.include = {
         ...this.query.include,
         [field]: true,

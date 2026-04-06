@@ -61,30 +61,6 @@ const getProjects = async (
     filterableFields: projectFilterableFields,
   });
 
-  await prisma.project.findMany({
-    where: {
-      isDeleted: false,
-    },
-    select: {
-      id: true,
-      title: true,
-      admin: {
-        select: {
-          name: true,
-        },
-      },
-      technologies: {
-        select: {
-          technology: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
   const result = await queryBuilder
     .paginate()
     .sort()
