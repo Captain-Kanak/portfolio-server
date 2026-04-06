@@ -108,31 +108,31 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
 
       const searchConditions: Record<string, unknown>[] = searchableFields.map(
         (fields) => {
-          // if (fields.includes(".")) {
-          //   const fieldParts = fields.split(".").map((field) => field.trim());
+          if (fields.includes(".")) {
+            const fieldParts = fields.split(".").map((field) => field.trim());
 
-          //   if (fieldParts.length === 2) {
-          //     const [field, nestedField] = fieldParts;
+            if (fieldParts.length === 2) {
+              const [field, nestedField] = fieldParts;
 
-          //     return {
-          //       [field]: {
-          //         [nestedField]: searchString,
-          //       },
-          //     };
-          //   } else if (fieldParts.length === 3) {
-          //     const [field, nestedField1, nestedField2] = fieldParts;
+              return {
+                [field]: {
+                  [nestedField]: searchString,
+                },
+              };
+            } else if (fieldParts.length === 3) {
+              const [field, nestedField1, nestedField2] = fieldParts;
 
-          //     return {
-          //       [field]: {
-          //         some: {
-          //           [nestedField1]: {
-          //             [nestedField2]: searchString,
-          //           },
-          //         },
-          //       },
-          //     };
-          //   }
-          // }
+              return {
+                [field]: {
+                  some: {
+                    [nestedField1]: {
+                      [nestedField2]: searchString,
+                    },
+                  },
+                },
+              };
+            }
+          }
 
           return {
             [fields]: searchString,
@@ -171,77 +171,59 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
         return;
       }
 
-      // if (typeof value === "object" && !Array.isArray(value)) {
-      //   this.query.where = {
-      //     ...this.query.where,
-      //     [field]: this._parseFilterValueRange(
-      //       value as Record<string, string | number>,
-      //     ),
-      //   };
+      if (field.includes(".")) {
+        const fieldParts = field.split(".").map((field) => field.trim());
 
-      //   this.countQuery.where = {
-      //     ...this.countQuery.where,
-      //     [field]: this._parseFilterValueRange(
-      //       value as Record<string, string | number>,
-      //     ),
-      //   };
+        if (fieldParts.length === 2) {
+          const [field, nestedField] = fieldParts;
 
-      //   return;
-      // }
+          this.query.where = {
+            ...this.query.where,
+            [field]: {
+              some: {
+                [nestedField]: this._parseFilterValue(value),
+              },
+            },
+          };
 
-      // if (field.includes(".")) {
-      //   const fieldParts = field.split(".").map((field) => field.trim());
+          this.countQuery.where = {
+            ...this.countQuery.where,
+            [field]: {
+              some: {
+                [nestedField]: this._parseFilterValue(value),
+              },
+            },
+          };
 
-      //   if (fieldParts.length === 2) {
-      //     const [field, nestedField] = fieldParts;
+          return;
+        } else if (fieldParts.length === 3) {
+          const [field, nestedField1, nestedField2] = fieldParts;
 
-      //     this.query.where = {
-      //       ...this.query.where,
-      //       [field]: {
-      //         some: {
-      //           [nestedField]: this._parseFilterValue(value),
-      //         },
-      //       },
-      //     };
+          this.query.where = {
+            ...this.query.where,
+            [field]: {
+              some: {
+                [nestedField1]: {
+                  [nestedField2]: this._parseFilterValue(value),
+                },
+              },
+            },
+          };
 
-      //     this.countQuery.where = {
-      //       ...this.countQuery.where,
-      //       [field]: {
-      //         some: {
-      //           [nestedField]: this._parseFilterValue(value),
-      //         },
-      //       },
-      //     };
+          this.countQuery.where = {
+            ...this.countQuery.where,
+            [field]: {
+              some: {
+                [nestedField1]: {
+                  [nestedField2]: this._parseFilterValue(value),
+                },
+              },
+            },
+          };
 
-      //     return;
-      //   } else if (fieldParts.length === 3) {
-      //     const [field, nestedField1, nestedField2] = fieldParts;
-
-      //     this.query.where = {
-      //       ...this.query.where,
-      //       [field]: {
-      //         some: {
-      //           [nestedField1]: {
-      //             [nestedField2]: this._parseFilterValue(value),
-      //           },
-      //         },
-      //       },
-      //     };
-
-      //     this.countQuery.where = {
-      //       ...this.countQuery.where,
-      //       [field]: {
-      //         some: {
-      //           [nestedField1]: {
-      //             [nestedField2]: this._parseFilterValue(value),
-      //           },
-      //         },
-      //       },
-      //     };
-
-      //     return;
-      //   }
-      // }
+          return;
+        }
+      }
 
       this.query.where = {
         ...this.query.where,
@@ -266,41 +248,41 @@ export class QueryBuilder<T, TWhereInput, TInclude> {
     }
 
     fieldsArray?.forEach((field) => {
-      // if (field.includes(".")) {
-      //   const fieldParts = field.split(".").map((field) => field.trim());
+      if (field.includes(".")) {
+        const fieldParts = field.split(".").map((field) => field.trim());
 
-      //   if (fieldParts.length === 2) {
-      //     const [field, nestedField] = fieldParts;
+        if (fieldParts.length === 2) {
+          const [field, nestedField] = fieldParts;
 
-      //     this.query.select = {
-      //       ...this.query.select,
-      //       [field]: {
-      //         select: {
-      //           [nestedField]: true,
-      //         },
-      //       },
-      //     };
+          this.query.select = {
+            ...this.query.select,
+            [field]: {
+              select: {
+                [nestedField]: true,
+              },
+            },
+          };
 
-      //     return;
-      //   } else if (fieldParts.length === 3) {
-      //     const [field, nestedField1, nestedField2] = fieldParts;
+          return;
+        } else if (fieldParts.length === 3) {
+          const [field, nestedField1, nestedField2] = fieldParts;
 
-      //     this.query.select = {
-      //       ...this.query.select,
-      //       [field]: {
-      //         select: {
-      //           [nestedField1]: {
-      //             select: {
-      //               [nestedField2]: true,
-      //             },
-      //           },
-      //         },
-      //       },
-      //     };
+          this.query.select = {
+            ...this.query.select,
+            [field]: {
+              select: {
+                [nestedField1]: {
+                  select: {
+                    [nestedField2]: true,
+                  },
+                },
+              },
+            },
+          };
 
-      //     return;
-      //   }
-      // }
+          return;
+        }
+      }
 
       this.query.select = {
         ...this.query.select,

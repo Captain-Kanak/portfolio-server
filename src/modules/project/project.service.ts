@@ -2,7 +2,16 @@ import status from "http-status";
 import AppError from "../../errors/AppError.js";
 import { CreateProjectPayload } from "./project.interface.js";
 import { prisma } from "../../lib/prisma.js";
-import { Project } from "@prisma/client";
+import { Prisma, Project } from "@prisma/client";
+import {
+  IQueryParams,
+  QueryResult,
+} from "../../interfaces/query-builder.interface.js";
+import { QueryBuilder } from "../../utils/query-builder.js";
+import {
+  projectFilterableFields,
+  projectSearchableFields,
+} from "./project.constant.js";
 
 const addNewProject = async (
   payload: CreateProjectPayload,
@@ -40,6 +49,57 @@ const addNewProject = async (
   }
 };
 
+const getProjects = async (
+  query: IQueryParams,
+): Promise<QueryResult<Project>> => {
+  const queryBuilder = new QueryBuilder<
+    Project,
+    Prisma.ProjectWhereInput,
+    Prisma.ProjectInclude
+  >(prisma.project, query, {
+    searchableFields: projectSearchableFields,
+    filterableFields: projectFilterableFields,
+  });
+
+  await prisma.project.findMany({
+    where: {
+      isDeleted: false,
+    },
+    select: {
+      id: true,
+      title: true,
+      admin: {
+        select: {
+          name: true,
+        },
+      },
+      technologies: {
+        select: {
+          technology: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const result = await queryBuilder
+    .paginate()
+    .sort()
+    .where({
+      isDeleted: false,
+    })
+    .search()
+    .filter()
+    .select()
+    .includes({})
+    .execute();
+
+  return result;
+};
+
 const getProjectById = async (id: string) => {
   try {
     const project = await prisma.project.findUnique({
@@ -74,5 +134,6 @@ const getProjectById = async (id: string) => {
 
 export const projectService = {
   addNewProject,
+  getProjects,
   getProjectById,
 };

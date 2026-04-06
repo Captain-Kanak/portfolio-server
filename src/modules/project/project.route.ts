@@ -11,4 +11,8 @@ router.post(
   projectController.addNewProject,
 );
 
+router.get("/", projectController.getProjects);
+
+router.get("/:id", projectController.getProjectById);
+
 export { router as projectRouter };
