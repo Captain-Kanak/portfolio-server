@@ -81,6 +81,7 @@ const getProjectById = async (id: string) => {
     const project = await prisma.project.findUnique({
       where: {
         id,
+        isDeleted: false,
       },
     });
 
@@ -88,9 +89,10 @@ const getProjectById = async (id: string) => {
       throw new AppError("Project not found", status.NOT_FOUND);
     }
 
-    await prisma.project.update({
+    const updatedProject = await prisma.project.update({
       where: {
         id,
+        isDeleted: false,
       },
       data: {
         views: {
@@ -99,7 +101,7 @@ const getProjectById = async (id: string) => {
       },
     });
 
-    return project;
+    return updatedProject;
   } catch (error: any) {
     throw new AppError(
       error.message || "Failed to get project",
