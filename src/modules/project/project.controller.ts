@@ -55,9 +55,22 @@ const updateProjectById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteProjectById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await projectService.deleteProjectById(id as string);
+
+  return res.status(status.OK).json({
+    success: true,
+    message: "Project deleted successfully",
+    data: result,
+  });
+});
+
 export const projectController = {
   addNewProject,
   getProjects,
   getProjectById,
   updateProjectById,
+  deleteProjectById,
 };

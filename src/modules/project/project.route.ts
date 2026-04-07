@@ -34,4 +34,11 @@ router.patch(
   projectController.updateProjectById,
 );
 
+router.delete(
+  "/:id",
+  authMiddleware(AdminRole.SUPER_ADMIN, AdminRole.ADMIN),
+  validateRequestParams(paramsIdSchema),
+  projectController.deleteProjectById,
+);
+
 export { router as projectRouter };

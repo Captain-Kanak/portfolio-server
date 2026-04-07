@@ -172,9 +172,43 @@ const updateProjectById = async (
   }
 };
 
+const deleteProjectById = async (id: string): Promise<Project> => {
+  try {
+    const existingProject = await prisma.project.findUnique({
+      where: {
+        id,
+        isDeleted: false,
+      },
+    });
+
+    if (!existingProject) {
+      throw new AppError("Project not found", status.NOT_FOUND);
+    }
+
+    const deletedProject = await prisma.project.update({
+      where: {
+        id,
+        isDeleted: false,
+      },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+      },
+    });
+
+    return deletedProject;
+  } catch (error: any) {
+    throw new AppError(
+      error.message || "Failed to delete project",
+      status.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
 export const projectService = {
   addNewProject,
   getProjects,
   getProjectById,
   updateProjectById,
+  deleteProjectById,
 };
