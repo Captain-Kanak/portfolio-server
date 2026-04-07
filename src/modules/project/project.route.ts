@@ -26,4 +26,12 @@ router.get(
   projectController.getProjectById,
 );
 
+router.patch(
+  "/:id",
+  authMiddleware(AdminRole.SUPER_ADMIN, AdminRole.ADMIN),
+  validateRequestParams(paramsIdSchema),
+  validateRequestBody(projectValidation.updateProjectSchema),
+  projectController.updateProjectById,
+);
+
 export { router as projectRouter };

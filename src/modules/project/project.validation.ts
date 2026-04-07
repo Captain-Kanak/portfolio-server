@@ -11,6 +11,9 @@ const createProjectSchema = zod.object({
   technologies: zod.array(zod.uuid()).min(1),
 });
 
+const updateProjectSchema = createProjectSchema.partial();
+
 export const projectValidation = {
   createProjectSchema,
+  updateProjectSchema,
 };
