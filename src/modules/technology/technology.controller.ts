@@ -33,7 +33,20 @@ const getTechnologies = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getTechnologyById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await technologyService.getTechnologyById(id as string);
+
+  return res.status(status.OK).json({
+    success: true,
+    message: "Technology fetched successfully",
+    data: result,
+  });
+});
+
 export const technologyController = {
   addNewTechnology,
   getTechnologies,
+  getTechnologyById,
 };

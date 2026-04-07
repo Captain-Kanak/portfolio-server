@@ -70,7 +70,30 @@ const getTechnologies = async (
   }
 };
 
+const getTechnologyById = async (id: string): Promise<Technology> => {
+  try {
+    const technology = await prisma.technology.findUnique({
+      where: {
+        id,
+        isDeleted: false,
+      },
+    });
+
+    if (!technology) {
+      throw new AppError("Technology not found", status.NOT_FOUND);
+    }
+
+    return technology;
+  } catch (error: any) {
+    throw new AppError(
+      error.message || "Failed to get technology by ID",
+      status.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
 export const technologyService = {
   addNewTechnology,
   getTechnologies,
+  getTechnologyById,
 };
