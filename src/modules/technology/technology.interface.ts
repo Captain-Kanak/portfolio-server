@@ -6,3 +6,10 @@ export interface CreateTechnologyPayload {
   description?: string;
   type: TechnologyType;
 }
+
+export interface UpdateTechnologyPayload {
+  name?: string;
+  icon?: string;
+  description?: string;
+  type?: TechnologyType;
+}

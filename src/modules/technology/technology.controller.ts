@@ -45,8 +45,41 @@ const getTechnologyById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateTechnologyById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = {
+    ...req.body,
+    icon: req.file?.path,
+  };
+
+  const result = await technologyService.updateTechnologyById(
+    id as string,
+    payload,
+  );
+
+  return res.status(status.OK).json({
+    success: true,
+    message: "Technology updated successfully",
+    data: result,
+  });
+});
+
+const deleteTechnologyById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const result = await technologyService.deleteTechnologyById(id as string);
+
+  return res.status(status.OK).json({
+    success: true,
+    message: "Technology deleted successfully",
+    data: result,
+  });
+});
+
 export const technologyController = {
   addNewTechnology,
   getTechnologies,
   getTechnologyById,
+  updateTechnologyById,
+  deleteTechnologyById,
 };

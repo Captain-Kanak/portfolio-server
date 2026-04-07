@@ -28,4 +28,20 @@ router.get(
   technologyController.getTechnologyById,
 );
 
+router.patch(
+  "/:id",
+  authMiddleware(AdminRole.SUPER_ADMIN, AdminRole.ADMIN),
+  multerUpload.single("file"),
+  validateRequestParams(paramsIdSchema),
+  validateRequestBody(technologyValidation.updateTechnologySchema),
+  technologyController.updateTechnologyById,
+);
+
+router.delete(
+  "/:id",
+  authMiddleware(AdminRole.SUPER_ADMIN),
+  validateRequestParams(paramsIdSchema),
+  technologyController.deleteTechnologyById,
+);
+
 export { router as technologyRouter };
